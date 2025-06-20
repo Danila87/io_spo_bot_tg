@@ -1,0 +1,5 @@
+aiogram==3.7.0
+aiogram-dialog==2.1.0
+python-dotenv==1.0.1
+redis==5.2.1
+hvac==2.3.0

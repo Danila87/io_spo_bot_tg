@@ -7,141 +7,122 @@ class URLFactory:
         self._host = host
         self._port = port
 
-
     @property
     def base_url(self):
         return f'{self._host}:{self._port}'
 
     @property
     def base_url_song(self):
-        return f'{self.base_url}/song'
+        return f'{self.base_url}/songs/'
+
+    @property
+    def search_song(self):
+        return f'{self.base_url_song}search/'
+
+    @property
+    def base_url_song_category(self):
+        return f'{self.base_url_song}categories/'
+
+    @property
+    def song_category_childrens(self):
+        return f'{self.base_url_song_category}childrens/'
+
+    @property
+    def base_url_song_events(self):
+        return f'{self.base_url_song}song-events/'
 
     @property
     def base_url_piggy_bank(self):
-        return f'{self.base_url}/piggy_bank'
+        return f'{self.base_url}/piggy_bank/'
 
     @property
-    def base_url_methodical_book(self):
-        return f'{self.base_url}/methodical_book'
+    def piggy_bank_groups(self):
+        return f'{self.base_url_piggy_bank}groups/'
 
     @property
-    def base_url_song_categories(self):
-        return f'{self.base_url_song}/categories'
+    def piggy_bank_types_game(self):
+        return f'{self.base_url_piggy_bank}types_game/'
 
     @property
-    def song_category(self):
-        return f'{self.base_url_song_categories}/'
-
-    @property
-    def base_url_service(self):
-        return f'{self.base_url}/service'
-
-    @property
-    def search_by_title(self):
-        return f'{self.base_url_service}/search_by_title/'
-
-    @property
-    def reviews(self):
-        return f'{self.base_url_service}/reviews/'
-
-    @property
-    def all_songs(self):
-        return f'{self.base_url_song}/songs'
-
-    @property
-    def sons_by_category(self):
-        return f'{self.all_songs}/by_category/'
-
-    @property
-    def main_song_categories(self):
-        return f'{self.base_url_song_categories}/mains'
-
-    @property
-    def childs_category(self):
-        return f'{self.base_url_song_categories}/get_children/'
-
-    @property
-    def children_groups(self):
-        return f'{self.base_url_piggy_bank}/groups'
-
-    @property
-    def games(self):
-        return f'{self.base_url_piggy_bank}/games/'
-
-    @property
-    def game_file(self):
-        return f'{self.games}file/'
+    def base_url_games(self):
+        return f'{self.base_url_piggy_bank}games/'
 
     @property
     def games_by_type_group(self):
-        return f'{self.games}by_type_group/'
+        return f'{self.base_url_games}by_type_group/'
 
     @property
-    def game_types(self):
-        return f'{self.base_url_piggy_bank}/types_game'
+    def game_file(self):
+        return f'{self.base_url_games}file/'
 
     @property
-    def legend_by_id(self):
-        return f'{self.base_url_piggy_bank}/legends/'
-
-    @property
-    def legend_file(self):
-        return f'{self.legend_by_id}file/'
+    def base_piggy_bank_legend(self):
+        return f'{self.base_url_piggy_bank}legends/'
 
     @property
     def legends_by_group(self):
-        return f'{self.base_url_piggy_bank}/legend/by_group/'
+        return f'{self.base_piggy_bank_legend}by_group/'
 
     @property
-    def ktd(self):
-        return f'{self.base_url_piggy_bank}/ktd'
+    def legend_file(self):
+        return f'{self.base_piggy_bank_legend}file/'
 
     @property
-    def ktd_by_id(self):
-        return f'{self.ktd}/'
+    def base_piggy_bank_ktd(self):
+        return f'{self.base_url_piggy_bank}ktd/'
 
     @property
-    def ktds_by_group(self):
-        return f'{self.ktd_by_id}by_group/'
+    def ktd_by_group(self):
+        return f'{self.base_piggy_bank_ktd}by_group/'
 
     @property
     def ktd_file(self):
-        return f'{self.ktd_by_id}file/'
+        return f'{self.base_piggy_bank_ktd}file/'
 
     @property
-    def chapters(self):
-        return f'{self.base_url_methodical_book}/chapters/'
+    def base_url_methodical_book(self):
+        return f'{self.base_url}/methodical_book/'
 
     @property
-    def chapters_main(self):
-        return f'{self.chapters}mains'
+    def methodical_book_childrens(self):
+        return f'{self.base_url_methodical_book}childrens/'
 
     @property
-    def chapters_children(self):
-        return f'{self.chapters}get_children/'
+    def methodical_book_file(self):
+        return f'{self.base_url_methodical_book}file/'
 
     @property
-    def chapters_file(self):
-        return f'{self.chapters}file/'
+    def base_url_statistic(self):
+        return f'{self.base_url}/statistic/'
+
+    @property
+    def statistic_dashboards(self):
+        return f'{self.base_url_statistic}dashboards/'
+
+    @property
+    def statistic_dashboards_img(self):
+        return f'{self.base_url_statistic}img/'
+
+    @property
+    def statistic_visualisation(self):
+        return f'{self.statistic_dashboards}visualisations/'
+
+    @property
+    def statistic_visualisation_img(self):
+        return f'{self.statistic_visualisation}img/'
+
+    @property
+    def base_url_service(self):
+        return f'{self.base_url}/service/'
+
+    @property
+    def base_url_reviews(self):
+        return f'{self.base_url_service}reviews/'
 
     @property
     def check_user(self):
-        return f'{self.base_url_service}/check_user'
+        return f'{self.base_url_service}check_user/'
 
     @property
-    def statistic(self):
-        return f'{self.base_url}/statistic'
-
-    @property
-    def dashboards(self):
-        return f'{self.statistic}/dashboards'
-
-    @property
-    def bot_dashboards(self):
-        return f'{self.dashboards}/bot'
-
-    def visualisation(self, dashboard_uid: str):
-        return f'{self.dashboards}/{dashboard_uid}/visualisations'
-
-    def visualisation_imp(self, dashboard_uid: str, visualisation_id: int):
-        return f'{self.visualisation(dashboard_uid)}/{visualisation_id}/img'
+    def search_by_title(self):
+        return f'{self.base_url_song}search_by_title/'

@@ -16,17 +16,17 @@ async def get_ktds(
     ctx = dialog_manager.current_context()
     group_id = ctx.start_data.get('children_group_id')
 
-    ktds = await api_client.call_async_get(
-        url=url_f.ktds_by_group,
+    response = await api_client.call_async_get(
+        url=url_f.ktd_by_group,
         params={
             'group_id': group_id
         }
     )
 
     return {
-        'count': len(ktds),
-        'data': ktds,
-        'available': True if ktds else False
+        'count': response['meta']['total'],
+        'data': response['data'],
+        'available': True if response['data'] else False
     }
 
 @cache_data_file(expire=21600)
@@ -41,10 +41,10 @@ async def get_ktd(
     else:
         ktd_id = ctx.dialog_data.get('ktd_id')
 
-    ktd = await api_client.call_async_get(
-        url=url_f.ktd_by_id,
+    response = await api_client.call_async_get(
+        url=url_f.base_piggy_bank_ktd,
         params={
-            'ktd_id': ktd_id
+            'ktd_ids': [ktd_id]
         }
     )
 
@@ -56,7 +56,7 @@ async def get_ktd(
         )) is None:
 
         return DTOWithFile(
-        data=ktd,
+        data=response['data'][0],
         file_path=None,
         file=None
     )
@@ -71,7 +71,7 @@ async def get_ktd(
     file_media = MediaAttachment(type=content_type, path=str(file.resolve()))
 
     return DTOWithFile(
-        data=ktd,
+        data=response['data'][0],
         file_path=str(file.resolve()),
         file=file_media
     )

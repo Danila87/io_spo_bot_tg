@@ -14,13 +14,13 @@ async def get_types(
         dialog_manager: DialogManager,
         **kwargs
 ):
-    types = await api_client.call_async_get(
-        url=url_f.game_types
+    response = await api_client.call_async_get(
+        url=url_f.piggy_bank_types_game
     )
 
     return {
-        'count': len(types),
-        'data': types
+        'count': response['meta']['total'],
+        'data': response['data'],
     }
 
 async def get_games(
@@ -31,7 +31,7 @@ async def get_games(
     group_id = ctx.start_data.get('children_group_id')
     type_id = ctx.dialog_data.get('game_type_id')
 
-    games = await api_client.call_async_get(
+    response = await api_client.call_async_get(
         url=url_f.games_by_type_group,
         params={
             'type_id': type_id,
@@ -40,10 +40,11 @@ async def get_games(
     )
 
     return {
-        'count': len(games),
-        'data': games,
-        'available': True if games else False
+        'count': response['meta']['total'],
+        'data': response['data'],
+        'available': True if response['data'] else False
     }
+
 
 @cache_data_file(expire=21600)
 async def get_game(
@@ -57,10 +58,10 @@ async def get_game(
     else:
         game_id = ctx.dialog_data.get('game_id')
 
-    game = await api_client.call_async_get(
-        url=url_f.games,
+    game_response = await api_client.call_async_get(
+        url=url_f.base_url_games,
         params={
-            'game_id': game_id
+            'game_id': [game_id]
         }
     )
 
@@ -71,7 +72,7 @@ async def get_game(
             }
         )) is None:
         return DTOWithFile(
-        data=game,
+        data=game_response['data'][0],
         file_path=None,
         file=None
     )
@@ -89,7 +90,7 @@ async def get_game(
     file_media = MediaAttachment(type=content_type, path=str(file.resolve()))
 
     return DTOWithFile(
-        data=game,
+        data=game_response['data'][0],
         file_path=str(file.resolve()),
         file=file_media
     )

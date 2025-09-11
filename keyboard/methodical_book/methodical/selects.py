@@ -17,12 +17,13 @@ async def select_chapter(
 ):
     ctx = dialog_manager.current_context()
 
-    if not (children_chapters := await api_client.call_async_get(
+    response = await api_client.call_async_get(
         params={
-            'id_chapter': item_id
+            'chapter_id': int(item_id)
         },
-        url=url_f.chapters_children
-    )):
+        url=url_f.methodical_book_childrens
+    )
+    if not (children_chapters := response['data']):
         ctx.dialog_data.update(
             chapter_id=item_id,
             current_chapter=item_id,
@@ -48,25 +49,25 @@ async def back_chapter(
         await dialog_manager.start(MethodicalBook.main)
         return
 
-    current_chapter_data = await api_client.call_async_get(
+    current_chapter_response = await api_client.call_async_get(
         params={
-            'id_chapter': current_chapter
+            'chapter_ids': [current_chapter]
         },
-        url=url_f.chapters
+        url=url_f.base_url_methodical_book
     )
 
     params = {
-        'id_chapter': current_chapter_data['parent_id']
-    } if current_chapter_data['parent_id'] else None
+        'chapter_id': current_chapter_response['data'][0]['parent_id']
+    } if current_chapter_response['data'][0]['parent_id'] else None
 
-    children_chapters = await api_client.call_async_get(
+    children_chapters_response = await api_client.call_async_get(
         params=params,
-        url=url_f.chapters_children
+        url=url_f.methodical_book_childrens
     )
 
     ctx.dialog_data.update(
-        children_chapters=children_chapters,
-        current_chapter=current_chapter_data['parent_id']
+        children_chapters=children_chapters_response['data'],
+        current_chapter=current_chapter_response['data'][0]['parent_id']
     )
 
     ctx.dialog_data['chapter_title_stack'] = ctx.dialog_data.get('chapter_title_stack', [])[:-1]

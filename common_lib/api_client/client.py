@@ -149,9 +149,10 @@ class ApiClient:
                     if response.status == HTTPStatus.INTERNAL_SERVER_ERROR or response.status == HTTPStatus.UNAUTHORIZED:
                         raise Exception(await response.text())
 
-                    response_data = await response.text()
-                    return json.loads(response_data) if isinstance(response_data, str) else response_data
-
+                    if response.status == HTTPStatus.OK:
+                        if response.headers.get('content-type') == 'application/json':
+                            response_data = await response.json()
+                            return response_data
 
         except Exception as e:
             logging.error(

@@ -16,13 +16,13 @@ async def get_dashboards(
 ):
     available = False
 
-    if dashboards := await api_client.call_async_get(
-        url=url_f.bot_dashboards
-    ):
-        available = True
+    response = await api_client.call_async_get(
+        url=url_f.statistic_dashboards
+    )
+    available = True if response['data'] else False
 
     return {
-        'dashboards': dashboards,
+        'dashboards': response['data'],
         'available': available
     }
 
@@ -35,15 +35,16 @@ async def get_visualisations(
     ctx = dialog_manager.current_context()
     dashboard_uid = ctx.dialog_data.get('dashboard_uid')
 
-    if visualisations := await api_client.call_async_get(
-            url=url_f.visualisation(
-                dashboard_uid=dashboard_uid
-            )
-    ):
-        available = True
+    response = await api_client.call_async_get(
+        url=url_f.statistic_visualisation,
+        params={
+            'dashboard_uid': dashboard_uid
+        }
+    )
+    available = True if response['data'] else False
 
     return {
-        'visualisations': visualisations,
+        'visualisations': response['data'],
         'available': available
     }
 
@@ -57,10 +58,11 @@ async def get_visualisation(
     ctx = dialog_manager.current_context()
 
     visualisation = await api_client.get_file(
-        url=url_f.visualisation_imp(
-            dashboard_uid=ctx.dialog_data.get('dashboard_uid'),
-            visualisation_id=ctx.dialog_data.get('visualisation_id')
-        )
+        url=url_f.statistic_visualisation_img,
+        params={
+            "panel_id": int(ctx.dialog_data.get('visualisation_id')),
+            "dashboard_uid": ctx.dialog_data.get('dashboard_uid')
+        }
     )
 
     if visualisation.filename is None:

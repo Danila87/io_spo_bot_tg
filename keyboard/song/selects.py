@@ -17,12 +17,13 @@ async def select_category(
 ):
     ctx = dialog_manager.current_context()
 
-    if not (children_category := await api_client.call_async_get(
+    response = await api_client.call_async_get(
         params={
-            'id_category': item_id
+            'category_id': item_id
         },
-        url=url_f.childs_category
-    )):
+        url=url_f.song_category_childrens
+    )
+    if not (categories := response['data']):
         ctx.dialog_data.update(
             category_id=item_id,
             current_category=item_id
@@ -33,7 +34,7 @@ async def select_category(
     else:
         ctx.dialog_data.update(
             current_category=item_id,
-            children_categories=children_category
+            children_categories=categories
         )
 
         await dialog_manager.switch_to(SongState.category_choice)
@@ -49,21 +50,25 @@ async def back_category(
         await dialog_manager.start(MainState.main)
         return
 
-    current_category_data = await api_client.call_async_get(
+    response = await api_client.call_async_get(
         params={
-            'category_id': current_category
+            'category_ids': [current_category]
         },
-        url=url_f.base_url_song_categories
+        url=url_f.base_url_song_category
     )
+
+    current_category_data = response['data'][0]
 
     params = {
-        'id_category': current_category_data['parent_id']
+        'category_id': current_category_data['parent_id']
     } if current_category_data['parent_id'] else None
 
-    children_categories = await api_client.call_async_get(
+    response = await api_client.call_async_get(
         params=params,
-        url=url_f.childs_category
+        url=url_f.song_category_childrens
     )
+
+    children_categories = response['data']
 
     ctx.dialog_data.update(
         children_categories=children_categories,

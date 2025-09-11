@@ -16,7 +16,7 @@ async def get_legends(
     ctx = dialog_manager.current_context()
     group_id = ctx.start_data.get('children_group_id')
 
-    legends = await api_client.call_async_get(
+    response = await api_client.call_async_get(
         url=url_f.legends_by_group,
         params={
             'group_id': group_id
@@ -24,9 +24,9 @@ async def get_legends(
     )
 
     return {
-        'count': len(legends),
-        'data': legends,
-        'available': True if legends else False
+        'count': response['meta']['total'],
+        'data': response['data'],
+        'available': True if response['data'] else False
     }
 
 @cache_data_file(expire=21600)
@@ -41,10 +41,10 @@ async def get_legend(
     else:
         legend_id = ctx.dialog_data.get('legend_id')
 
-    legend = await api_client.call_async_get(
-        url=url_f.legend_by_id,
+    response = await api_client.call_async_get(
+        url=url_f.base_piggy_bank_legend,
         params={
-            'legend_id': legend_id
+            'legend_ids': [legend_id]
         }
     )
 
@@ -55,7 +55,7 @@ async def get_legend(
             }
         )) is None:
         return DTOWithFile(
-            data=legend,
+            data=response['data'][0],
             file_path=None,
             file=None
         )
@@ -70,7 +70,7 @@ async def get_legend(
     file_media = MediaAttachment(type=content_type, path=str(file.resolve()))
 
     return DTOWithFile(
-        data=legend,
+        data=response['data'][0],
         file_path=str(file.resolve()),
         file=file_media
     )

@@ -11,7 +11,7 @@ async def create_review(
     success = True
     try:
         response = await api_client.call_async_post(
-            url=url_f.reviews,
+            url=url_f.base_url_reviews,
             body={
                 'id_user': event.from_user.id,
                 'text_review': event.text,

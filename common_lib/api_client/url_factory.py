@@ -9,7 +9,7 @@ class URLFactory:
 
     @property
     def base_url(self):
-        return f'{self._host}:{self._port}'
+        return f'http://{self._host}:{self._port}'
 
     @property
     def base_url_song(self):
@@ -125,4 +125,4 @@ class URLFactory:
 
     @property
     def search_by_title(self):
-        return f'{self.base_url_song}search_by_title/'
+        return f'{self.base_url_service}search_by_title/'

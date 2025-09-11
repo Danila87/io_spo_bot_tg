@@ -16,16 +16,16 @@ async def get_chapters(
     file = None
 
     if current_chapter_id := ctx.dialog_data.get('current_chapter'):
-        current_chapter = await api_client.call_async_get(
-            url=url_f.chapters,
-            params={'id_chapter': current_chapter_id}
+        response = await api_client.call_async_get(
+            url=url_f.base_url_methodical_book,
+            params={'chapter_ids': [current_chapter_id]}
         )
-        if not chapter_title_stack or chapter_title_stack[-1] != current_chapter['title']:
-            chapter_title_stack.append(current_chapter['title'])
+        if not chapter_title_stack or chapter_title_stack[-1] != response['data'][0]['title']:
+            chapter_title_stack.append(response['data'][0]['title'])
             ctx.dialog_data.update(chapter_title_stack=chapter_title_stack)
 
         file = await get_file(
-            url=url_f.chapters_file,
+            url=url_f.methodical_book_file,
             params={
                 'chapter_id': current_chapter_id
             }
@@ -34,9 +34,11 @@ async def get_chapters(
     if children_chapter := ctx.dialog_data.get('children_chapters'):
             chapters_data = children_chapter
 
-    if (chapters := await api_client.call_async_get(
-        url=url_f.chapters_main
-    )) and not current_chapter_id:
+    response =  await api_client.call_async_get(
+        url=url_f.base_url_methodical_book,
+        params={"is_only_parents": "true"}
+    )
+    if (chapters := response['data']) and not current_chapter_id:
             chapters_data = chapters
 
     return {

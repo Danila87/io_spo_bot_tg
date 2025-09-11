@@ -7,11 +7,11 @@ async def get_children_groups(
         dialog_manager: DialogManager,
         **kwargs
 ) -> Dict:
+    response = await api_client.call_async_get(
+        url=url_f.piggy_bank_groups
+    )
 
-    if children_groups := await api_client.call_async_get(
-        url=url_f.children_groups
-    ):
-        return {
-            'count': len(children_groups),
-            'data': children_groups
-        }
+    return {
+        'count': response['meta']['total'],
+        'data': response['data'],
+    }

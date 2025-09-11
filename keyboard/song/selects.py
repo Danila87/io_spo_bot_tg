@@ -19,7 +19,7 @@ async def select_category(
 
     response = await api_client.call_async_get(
         params={
-            'id_category': item_id
+            'category_id': item_id
         },
         url=url_f.song_category_childrens
     )
@@ -60,7 +60,7 @@ async def back_category(
     current_category_data = response['data'][0]
 
     params = {
-        'id_category': current_category_data['parent_id']
+        'category_id': current_category_data['parent_id']
     } if current_category_data['parent_id'] else None
 
     response = await api_client.call_async_get(

@@ -19,7 +19,6 @@ redis = redis.Redis(
     #password=REDIS_PASS
 )
 
-
 def cache_data_file(
         expire=600
 ):

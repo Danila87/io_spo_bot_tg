@@ -34,11 +34,10 @@ async def get_menu(
 
 
 async def main():
-
+    start_http_server(8001)
     logging.basicConfig(level=logging.INFO)
     await dp.start_polling(bot)
 
 
 if __name__ == "__main__":
-    start_http_server(8001)
     asyncio.run(main())

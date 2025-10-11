@@ -9,6 +9,7 @@ from aiogram_dialog import DialogManager, StartMode
 from bot import bot, dp
 
 from keyboard.main.states import MainState
+from prometheus_client import start_http_server
 
 @dp.message(CommandStart())
 async def start(
@@ -35,9 +36,9 @@ async def get_menu(
 async def main():
 
     logging.basicConfig(level=logging.INFO)
-
     await dp.start_polling(bot)
 
 
 if __name__ == "__main__":
+    start_http_server(8000)
     asyncio.run(main())

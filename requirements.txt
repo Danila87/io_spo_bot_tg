@@ -3,3 +3,4 @@ aiogram-dialog==2.1.0
 python-dotenv==1.0.1
 redis==5.2.1
 hvac==2.3.0
+prometheus_client==0.23.1
